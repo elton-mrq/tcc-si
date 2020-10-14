@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Login</title>
+            </f:facet>
+
+            <style type="text/css">                
+                .semborda tr, .semborda td{
+                    border: none !important;
+                }                
+            </style>
+
+        </h:head>
+        <h:body>
+            <ui:composition template="template/templatePrincipal.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Acesso Restrito</div> </ui:define>
+
+                <ui:define name="conteudo">
+
+                    <div id="textChamada" 
+                         style="position: absolute; 
+                         margin-top: 15px; 
+                         margin-left: 10px;
+                         font: small-caps;
+                         font-weight: bold;">
+                        Você que está cadastrado em nosso sistema, 
+                        insira os dados abaixo para acessar efetuar o login.
+                    </div>
+
+                    <h:form>
+                      <p:growl showDetail="true" sticky="true" autoUpdate="true" /> 
+                        <p:dialog header="Acesse o Sistema VDS" 
+                                  visible="true" 
+                                  closable="false" 
+                                  draggable="false" 
+                                  resizable="false" 
+                                  width="740" 
+                                  height="300" 
+                                  style="position: absolute; 
+                                  font-size: 14px; 
+                                  font-weight: bold; 
+                                  margin-top: 60px; 
+                                  margin-left: 8px">
+                            
+ 
+                            <h:panelGrid columns="3" 
+                                         styleClass="semborda" 
+                                         style="position: absolute; 
+                                         font-size: 12px; 
+                                         font-weight: bold; 
+                                         margin-top: 15px;"
+                                         cellspacing="20"
+                                         cellpadding="5">
+
+                                <p:outputLabel value="Usuário: "  />
+                                <p:inputText id="usuario" 
+                                             size="25"
+                                             value="#{mBLogin.usuarioLogado.email}"
+                                             required="true"
+                                             requiredMessage="Login Obrigatório"
+                                             validatorMessage="e-mail inválido">
+                                    <f:validateLength minimum="5" />
+                                    <f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+" />
+                                </p:inputText>
+                                   
+                                <p:message for="usuario" display="icon" />
+                                    
+                                <p:outputLabel value="Senha: "  />
+                                <p:password id="senhaUsuario"
+                                            size="25"
+                                            value="#{mBLogin.usuarioLogado.senha}"
+                                            required="true"
+                                            requiredMessage="Senha Obrigatória"/>
+                                                                
+                                <p:message for="senhaUsuario" display="icon" />
+                                
+                                <p:outputLabel />
+                                <p:commandButton icon="ui-icon-unlocked" 
+                                                 value="Confirmar" 
+                                                 style="float: right;" 
+                                                 ajax="false"
+                                                 action="#{mBLogin.dologin}"
+                                                 update="display"/>                              
+                            </h:panelGrid>     
+                        
+                        <div id="imgSuas" style="float: right">
+                            <h:outputLink value="http://www.mds.gov.br/assistenciasocial/vigilancia-socioassistencial%20"> 
+                                <p:graphicImage library="primefaces-excitebike/images" name="suas.png" title="SUAS"/>                            
+                            </h:outputLink>
+                        </div>
+
+                        </p:dialog>
+
+                    </h:form>
+
+                </ui:define> 
+
+            </ui:composition>
+        </h:body>
+
+    </f:view>
+
+</html>
+

@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Manutenção de Usuários</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                    <p:growl id="growUsuario" showDetail="true" autoUpdate="true" />
+                    <div id="cadUsuario" 
+                         style="text-align: justify; 
+                         font-size: 1em; 
+                         float: left; 
+                         font-variant: small-caps;; 
+                         font-weight: bold">
+                      
+                        <br /><br/>
+                        <h:form id="frmPrincipal"><!--incio form principal -->
+
+                            <p:dataTable id="manutencaoUsuario"
+                                         value="#{mBUsuario.usuarios}"
+                                         var="user"
+                                         style="width: 100%"
+                                         paginator="true"
+                                         rows="6"
+                                         rowsPerPageTemplate="3, 6, 9">
+                                
+                                <f:facet name="header">
+                                    <h:outputText value="Selecione o Usuários"
+                                                  style="font-size: 1.5em;"/>
+                                </f:facet>
+
+                                <p:column headerText="Codigo"
+                                          style="width: 7%;
+                                          text-align: center;">
+                                    <h:outputText value="#{user.idUsuario}"/>
+                                </p:column>
+
+                                <p:column headerText="Nome"
+                                          style="width: 35%;"
+                                          sortBy="#{user.nome}">
+                                    <h:outputText value="#{user.nome}"/>
+                                </p:column>
+
+                                <p:column headerText="E-mail"
+                                          style="width: 25%;">
+                                    <h:outputText value="#{user.email}"/>
+                                </p:column>
+
+                                <p:column headerText="Setor"
+                                          style="width: 20%;">
+                                    <h:outputText value="#{user.setor}"/>
+                                </p:column>
+
+                                <p:column headerText="Ações" 
+                                          colspan="2" 
+                                          style="alignment-adjust: central;
+                                          text-align: center;">
+
+                                    <p:commandButton immediate="true" 
+                                                     icon="ui-icon-document-b"
+                                                     update=":formAlterar:dialogAlterar"                                                     
+                                                     oncomplete="PF('alteraUsuario').show()">                                               
+                                        <f:setPropertyActionListener target="#{mBUsuario.usuario}"
+                                                                     value="#{user}" />                         
+
+                                    </p:commandButton>            
+
+                                    <p:commandButton icon="ui-icon-trash"
+                                                     update=":frmPrincipal:manutencaoUsuario"
+                                                     immediate="true"
+                                                     oncomplete="PF('confirmacao').show()">
+                                        <f:setPropertyActionListener target="#{mBUsuario.usuario}"
+                                                                     value="#{user}" />  
+                                    </p:commandButton>                         
+
+                                    <p:dialog id="confirmaExclusao"
+                                              header="Atenção"
+                                              widgetVar="confirmacao"
+                                              showEffect="explode"
+                                              hideEffect="bounce"
+                                              resizable="false"
+                                              closable="false"                                   
+                                              style="font-size: 0.9em;
+                                              text-align: center;">
+
+                                        <h:outputText value="Deseja Excluir #{mBUsuario.usuario.nome}?"/>
+                                        <br/><br/>
+                                 
+                                        <p:commandButton value="Sim"
+                                                         action="#{mBUsuario.removerUsuario(mBUsuario.usuario)}"
+                                                         update=":frmPrincipal:manutencaoUsuario"
+                                                         immediate="true"
+                                                         oncomplete="PF('confirmacao').hide()"/>
+                                      
+                                        <p:commandButton value="Não"                                       
+                                                         oncomplete="PF('confirmacao').hide()" />
+                                    </p:dialog>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form> <!-- fim form Principal -->
+                        
+                        <h:form id="formAlterar"><!--Inicio do Form Alterar -->
+                            <p:dialog id="dialogAlterar"
+                                      header="Alterar Usuário"
+                                      widgetVar="alteraUsuario"
+                                      resizable="false"
+                                      closable="false"
+                                      showEffect="fade"
+                                      hideEffect="explode"
+                                      width="420"
+                                      height="300"><!--Inicio do Dialogo de Alteração -->
+                                <h:panelGrid columns="2"
+                                             style="position: absolute;
+                                             margin-top: 5px;
+                                             text-align: left;
+                                             font-size: 0.95em;"
+                                             cellpadding="8">
+                                    <p:outputLabel value="Nome: " style="text-align: left" /><p:outputLabel />
+                                    <p:inputText id="nomeUsuario"
+                                                 value="#{mBUsuario.usuario.nome}"
+                                                 size="35"
+                                                 required="true"/>
+                                    <p:message for="nomeUsuario" />
+                                    
+                                    <p:outputLabel value="E-mail: " style="text-align: left" /><p:outputLabel />
+                                    <p:inputText id="emailUsuario"
+                                                 value="#{mBUsuario.usuario.email}"
+                                                 size="35"
+                                                 required="true"/>
+                                    <p:message for="emailUsuario" />
+                                    
+                                    <p:outputLabel value="Setor: " style="text-align: left" /><p:outputLabel />
+                                    <p:selectOneMenu id="console" 
+                                                     value="#{mBUsuario.usuario.setor}" 
+                                                     required="true"
+                                                     style="width: 270px;">                                        
+                                        <f:selectItem itemLabel="Casa dos Conselhos" itemValue="Casa dos Conselhos" />
+                                        <f:selectItem itemLabel="Central de Informações" itemValue="Central de Informações" />
+                                        <f:selectItem itemLabel="Ouvidoria Social" itemValue="Ouvidoria Social" />
+                                        <f:selectItem itemLabel="Vigilância Social" itemValue="Vigilância Social" />
+                                    </p:selectOneMenu>
+                                    <p:message for="console" display="icon" />
+                                    <h:inputHidden value="#{mBUsuario.usuario.senha}" />
+                                    <h:inputHidden value="#{mBUsuario.usuario.idUsuario}" />
+                                    <p:column>
+                                        <p:commandButton value="Atualizar"
+                                                         action="#{mBUsuario.atualizarUsuario}"
+                                                         oncomplete="PF('alteraUsuario').hide()"
+                                                         update=":frmPrincipal:manutencaoUsuario"
+                                                         style="float: right;"/>
+                                        <p:commandButton value="Cancelar"                                                     
+                                                         oncomplete="PF('alteraUsuario').hide()"
+                                                         style="float: right;"/>
+                                    </p:column>
+                                   
+                                </h:panelGrid>
+                            </p:dialog><!--Fim do Dialogo de Alteração -->
+                        </h:form><!--Fim do Form Alterar -->
+                    </div>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

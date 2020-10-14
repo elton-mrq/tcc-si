@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+            
+            <script>  
+                    jQuery(document).ready(function(jQuery) {  
+                        // Chamada da funcao upperText(); ao carregar a pagina  
+                        upperText();  
+                    });  
+                    // Funcao que faz o texto ficar em uppercase  
+                    function upperText() {  
+                        // Para tratar o colar  
+                        jQuery(".up").bind('paste', function(e) {  
+                            var el = jQuery(this);  
+                            setTimeout(function() {  
+                                var text = jQuery(el).val();  
+                                el.val(text.toUpperCase());  
+                            }, 100);  
+                        });  
+
+                        // Para tratar quando é digitado  
+                        jQuery(".up").keypress(function() {  
+                            var el = jQuery(this);  
+                            setTimeout(function() {  
+                                var text = jQuery(el).val();  
+                                el.val(text.toUpperCase());  
+                            }, 100);  
+                        });                        
+                                               
+                    }  
+            </script>                       
+
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Cadastrar Orgãos Responsáveis</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                    <h:form id="formCadOrgao">    
+                        <p:growl sticky="true" showDetail="true" showSummary="true" />
+                    <div id="dadosOrgao" style="text-align: justify; font-size: 1em; float: 
+                         left; font-variant: small-caps; margin-top: 10px; font-weight: bold">
+                        Dados Organizacionais
+
+                            <p:panelGrid columns="3" styleClass="semborda" 
+                                         style="position: absolute; 
+                                         margin-top: 5px; 
+                                         text-align: left; 
+                                         font-size: 0.9em;">  
+                                
+                                <p:outputLabel value="Código Suas:"/>
+                                <p:outputLabel value="Nome do Equipamento:" />
+                                <p:outputLabel value="Rede:" />
+                                
+                                <p:inputText id="txtCodSuas"
+                                             size="30"
+                                             value="#{mBOrgResp.orgResp.codSuas}"
+                                             converterMessage="Código Suas Incompativel. Digite Somente Números"
+                                             maxlength="11">
+                                    <f:convertNumber integerOnly="true" minIntegerDigits="1" maxIntegerDigits="11"  />                                 
+                                </p:inputText>
+                                
+                                <p:inputText id="NomeEq" 
+                                             size="50"
+                                             value="#{mBOrgResp.orgResp.nomeOrgao}"
+                                             required="true"
+                                             styleClass="up"/>
+                                <p:selectOneMenu id="redeOrgao"                                                 
+                                                 label="Text 3"
+                                                 value="#{mBOrgResp.orgResp.tipoRede}"
+                                                 required="true"
+                                                 requiredMessage="Tipo de Rede é Necessário">
+                                    <f:selectItem itemLabel="Seleciona a Rede" itemValue="" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Rede Pública" itemValue="Publica" />
+                                    <f:selectItem itemLabel="Privada" itemValue="Privada" />                                
+                                </p:selectOneMenu>
+
+                                <p:outputLabel value="Email:" />
+                                <p:outputLabel value="Telefone:"/>
+                                <p:outputLabel value="Celular:" />
+                                
+                                <p:inputText id="emailorgao"
+                                             value="#{mBOrgResp.orgResp.email}"
+                                             required="true"
+                                             validatorMessage="e-mail inválido"
+                                             requiredMessage="E-mail é Necessário">
+                                    <f:validateLength minimum="5" />
+                                    <f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+" />
+                                </p:inputText>
+                                
+                                <p:column > 
+                                    <p:inputMask maxlength="2"
+                                                 mask="(99)"
+                                                 size="2"
+                                                 value="#{mBOrgResp.tel1.dddTel}"
+                                                 required="true"
+                                                 requiredMessage="DDD Telefone é Necessário"/>
+                                <p:inputMask id="tel1" 
+                                             mask="9999-9999"
+                                             size="10"
+                                             value="#{mBOrgResp.tel1.telefone}"
+                                             required="true"
+                                             requiredMessage="Telefone é Necessário"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputMask maxlength="2"
+                                                 size="2"
+                                                 mask="(99)"
+                                                 value="#{mBOrgResp.tel2.dddTel}"
+                                                 required="true"
+                                                 requiredMessage="DDD Celular é Necessário"/>
+                                <p:inputMask id="tel2" 
+                                             mask="99999-9999"
+                                             size="10"
+                                             value="#{mBOrgResp.tel2.telefone}"
+                                             required="true"
+                                             requiredMessage="Celular é Necessário"/> 
+                                </p:column>
+                                <p:message for="txtCodSuas" display="text"  />
+                            </p:panelGrid>                        
+                            
+                    </div> 
+
+                    <div id="endereco" 
+                         style=" position: absolute; 
+                         text-align: 
+                         justify; 
+                         font-size: 1em; 
+                         float: left; 
+                         font-variant: small-caps;
+                         margin-top: 170px; 
+                         font-weight: bold;">
+                       
+                        Endereço                        
+
+                                           
+                            <p:panelGrid columns="3"                                          
+                                         styleClass="semborda" 
+                                         style="position: absolute; 
+                                         text-align: left; 
+                                         font-size: 0.9em; 
+                                         margin-top: 5px;">                           
+                                <p:outputLabel value="Tipo:" />
+                                <p:outputLabel value="Logradouro:" />
+                                <p:outputLabel value="Nº:" />
+                                
+                                <p:selectOneMenu id="tipoLog"
+                                                 style="width: 180px"
+                                                 value="#{mBOrgResp.endOrgResp.tipoLog}"
+                                                 required="true">
+                                    <f:selectItem itemLabel="Selecione Tipo" itemValue="" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="Alameda" itemValue="Al" />
+                                    <f:selectItem itemLabel="Avenida" itemValue="Av" />
+                                    <f:selectItem itemLabel="Rua" itemValue="Rua" />
+                                    <f:selectItem itemLabel="Travessa" itemValue="Tr" />                                    
+                                </p:selectOneMenu>
+                                <p:inputText id="Logradouro" 
+                                             size="50" 
+                                             value="#{mBOrgResp.endOrgResp.nomeLog}"
+                                             required="true"
+                                             styleClass="up"/>
+                                
+                                <p:inputText id="Num" size="15"
+                                             value="#{mBOrgResp.endOrgResp.nrLog}"
+                                             required="true"/>  
+
+                                <p:outputLabel value="Bairro:" />
+                                <p:outputLabel value="Cidade:"/>
+                                <p:outputLabel value="UF:" />
+                                <p:inputText id="bairro" 
+                                             size="35"
+                                             value="#{mBOrgResp.endOrgResp.bairro}"
+                                             required="true"
+                                             styleClass="up"/>
+                                <p:inputText id="cidade" 
+                                             size="30"
+                                             value="#{mBOrgResp.endOrgResp.cidade}"
+                                             required="true"
+                                             styleClass="up"/>
+                                <p:inputText id="uf" 
+                                             size="15"
+                                             value="#{mBOrgResp.endOrgResp.uf}"
+                                             maxlength="2"
+                                             required="true"
+                                             styleClass="up"/>
+
+                                <p:outputLabel value="CEP:" />
+                                <p:outputLabel />
+                                <p:outputLabel />
+                                <p:inputMask id="cep" 
+                                             mask="99999-999"
+                                             value="#{mBOrgResp.endOrgResp.cep}"
+                                             required="true"/> 
+                                
+                                    <p:commandButton value="Confirmar" 
+                                                     ajax="false"                                                     
+                                                     style="float: right;
+                                                     width: 80px" 
+                                                     action="#{mBOrgResp.salvarOrgao()}"
+                                                     id="btnConfirm"/>
+                                    
+                            </p:panelGrid>   
+                    
+                    </div>  
+                      
+                        
+                    </h:form>
+                    
+                    <h:form>
+                        <div id="cancelar"
+                             style="margin-top: 325px;
+                             margin-right: 180px;">
+                            <p:commandButton value="Cancelar" 
+                                                     ajax="false" 
+                                                     style="float: right;
+                                                     width: 80px"
+                                                     action="#{mBOrgResp.cancelarInclusao}"/>
+                        </div>
+                    </h:form>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

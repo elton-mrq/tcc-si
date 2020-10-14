@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+            <script type="text/javascript">
+
+                PrimeFaces.locales['pt'] = {
+                    closeText: 'Fechar',
+                    prevText: 'Anterior',
+                    nexText: 'Próximo',
+                    currentText: 'Começo',
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
+                        'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                  //  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex' 'Sáb'],
+                            dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+                    wekHeader: 'Semana',
+                    firstDay: 0,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: '',
+                    timeOnlyTitle: 'Tempo',
+                    hourText: 'Hora',
+                    minuteText: 'Minuto',
+                    secondText: 'Segundo',
+                    ampm: 'false',
+                    month: 'Mês',
+                    week: 'Semana',
+                    day: 'Dia',
+                    allDayTex: 'Todo o Dia'
+                };
+
+            </script>
+            
+            <script>  
+                    jQuery(document).ready(function(jQuery) {  
+                        // Chamada da funcao upperText(); ao carregar a pagina  
+                        upperText();  
+                    });  
+                    // Funcao que faz o texto ficar em uppercase  
+                    function upperText() {  
+                        // Para tratar o colar  
+                        jQuery(".up").bind('paste', function(e) {  
+                            var el = jQuery(this);  
+                            setTimeout(function() {  
+                                var text = jQuery(el).val();  
+                                el.val(text.toUpperCase());  
+                            }, 100);  
+                        });  
+
+                        // Para tratar quando é digitado  
+                        jQuery(".up").keypress(function() {  
+                            var el = jQuery(this);  
+                            setTimeout(function() {  
+                                var text = jQuery(el).val();  
+                                el.val(text.toUpperCase());  
+                            }, 100);  
+                        });  
+                    }  
+            </script>     
+
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Registrar Ocorrência</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                    <h:form id="ocorrencia">    
+                        <div id="dadosOrgao" style="text-align: justify; font-size: 1em; float: 
+                             left; font-variant: small-caps; margin-top: 10px; font-weight: bold">
+                            <p:growl showDetail="true" sticky="true" autoUpdate="true"/>
+                            <p:tabView style="width: 1000px;
+                                       height: 370px;"
+                                       rendered="#{mBOcorrencia.exibeOcorrencia}"
+                                       activeIndex="#{mBOcorrencia.ativaTab}">
+                                <p:tab title="Vitima">
+                                    <h:panelGrid columns="2" cellpadding="15">
+
+                                        <p:outputLabel value="Nome:" />
+                                        <p:inputText size="25"
+                                                     value="#{mBOcorrencia.vitima.nomeVitima}"
+                                                     required="true"
+                                                     requiredMessage="O nome da Vitíma é necessário!"
+                                                     styleClass="up"/>
+
+                                        <p:outputLabel value="Data Nasc:" />
+                                        <p:column colspan="2">
+                                            <p:calendar id="dtNasc"
+                                                        locale="pt" 
+                                                        navigator="true"
+                                                        pattern="dd/MM/yyyy"
+                                                        title="Selecione a Data"
+                                                        value="#{mBOcorrencia.vitima.dtNasc}"
+                                                        required="true"
+                                                        requiredMessage="A data de nascimento é necessária!"/>                         
+                                        </p:column>                                                  
+                                        <p:outputLabel value="Sexo:"/>
+                                        <p:selectOneMenu id="sexo" 
+                                                         style="width: 185px;"
+                                                         value="#{mBOcorrencia.vitima.sexo}"
+                                                         required="true">
+                                            <f:selectItem itemLabel="Selecione o Sexo" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="Masculino" itemValue="M" />
+                                            <f:selectItem itemLabel="Feminino" itemValue="F" />
+                                        </p:selectOneMenu> 
+
+                                        <p:outputLabel value="Agressor:"
+                                                       rendered="#{mBOcorrencia.exibeTab}"/>
+                                        <p:selectOneMenu id="Agressor" 
+                                                         style="width: 185px;"
+                                                         effect="fade"
+                                                         value="#{mBOcorrencia.agressorSelecionado}"
+                                                         rendered="#{mBOcorrencia.exibeTab}"
+                                                         required="true">
+                                            <f:selectItem itemLabel="Selecione o Parentesco" 
+                                                          noSelectionOption="true" />
+                                            <f:selectItems value="#{mBOcorrencia.agressores}"
+                                                           var="agressor"
+                                                           itemLabel="#{agressor.descParentesco}"
+                                                           itemValue="#{agressor.idAgressor}"/>
+                                        </p:selectOneMenu> 
+
+                                    </h:panelGrid>  
+                                   
+                                </p:tab>
+                                <p:tab title="Endereço">
+                                    <h:panelGrid columns="2"
+                                                 cellpadding="5">
+
+                                        <p:outputLabel value="Tipo:" />
+                                        <p:selectOneMenu id="tipoLog"
+                                                         style="width: 180px"
+                                                         value="#{mBOcorrencia.endVitima.tipoLog}"
+                                                         required="true">
+                                            <f:selectItem itemLabel="Selecione Tipo" itemValue="" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="Alameda" itemValue="Al" />
+                                            <f:selectItem itemLabel="Avenida" itemValue="Av" />
+                                            <f:selectItem itemLabel="Rua" itemValue="Rua" />
+                                            <f:selectItem itemLabel="Travessa" itemValue="Tr" />
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Logradouro:" />
+                                        <p:inputText id="Logradouro" 
+                                                     size="50" 
+                                                     value="#{mBOcorrencia.endVitima.nomeLog}"
+                                                     required="true"/>
+                                        <p:outputLabel value="Nº:" />
+                                        <p:inputText id="Num" size="15"
+                                                     value="#{mBOcorrencia.endVitima.nrLog}"
+                                                     rendered="true"/>  
+
+                                        <p:outputLabel value="Bairro:" />
+                                        <p:inputText id="bairro" 
+                                                     size="35"
+                                                     value="#{mBOcorrencia.endVitima.bairro}"
+                                                     required="true"/>
+                                        <p:outputLabel value="Cidade:"/>
+                                        <p:inputText id="cidade" 
+                                                     size="30"
+                                                     value="#{mBOcorrencia.endVitima.cidade}"
+                                                     required="true"/>
+                                        <p:outputLabel value="UF:" />
+                                        <p:inputText id="uf" 
+                                                     size="15"
+                                                     value="#{mBOcorrencia.endVitima.uf}"
+                                                     maxlength="2"
+                                                     required="true"/>
+
+                                        <p:outputLabel value="CEP:" />
+                                        <p:inputMask id="cep" 
+                                                     mask="99999-999"
+                                                     value="#{mBOcorrencia.endVitima.cep}"
+                                                     required="true"/>
+
+                                    </h:panelGrid>
+
+
+                                </p:tab>
+
+                                <p:tab title="Telefones">
+                                    <h:panelGrid columns="2" cellpadding="15">
+                                        <h:outputText value="Telefone" /><h:inputHidden />
+                                        <p:column>
+                                            <p:inputMask mask="(99)" size="2"
+                                                         value="#{mBOcorrencia.tel1.ddd}"
+                                                         required="true"/>
+                                            <p:inputMask mask="9999-9999" 
+                                                         size="15" 
+                                                         value="#{mBOcorrencia.tel1.telVitima}"
+                                                         required="true"/>
+                                        </p:column><h:inputHidden />                                      
+
+                                        <h:outputText value="Celular:" /><h:inputHidden />
+                                        <p:column>
+                                            <p:inputMask mask="(99)" 
+                                                         size="2" 
+                                                         maxlength="2"
+                                                         value="#{mBOcorrencia.tel2.ddd}"
+                                                         required="true"/>
+                                            <p:inputMask mask="99999-9999" 
+                                                         size="15"
+                                                         value="#{mBOcorrencia.tel2.telVitima}"
+                                                         required="true"/>
+                                        </p:column>     <h:inputHidden />                               
+                                        <p:column>
+                                            <p:commandButton value="Cancelar"
+                                                             action="#{mBOcorrencia.cancelaVitima()}"
+                                                             ajax="false"
+                                                             rendered="#{mBOcorrencia.exibeBotao}"/>
+                                            <p:commandButton value="Confirmar"
+                                                             action="#{mBOcorrencia.confirmaVitma()}"
+                                                             ajax="false"
+                                                             rendered="#{mBOcorrencia.exibeBotao}"/>
+
+                                        </p:column>
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Ocorrência"
+                                       rendered="#{mBOcorrencia.exibeTab}">
+                                    <h:panelGrid columns="4" cellpadding="5">
+                                        <h:outputText value="Data da Denúncia:" /><h:inputHidden />
+                                        <h:outputText value="Hora da Denúncia:" /><h:inputHidden />
+                                        <p:calendar id="dtDenuncia" 
+                                                    showOn="button" 
+                                                    locale="pt" 
+                                                    pattern="dd/MM/yyyy"
+                                                    title="Selecione a Data"
+                                                    value="#{mBOcorrencia.ocorrencia.dtDenuncia}"
+                                                    requiredMessage="A data da Denúncia é necessária!"/>
+                                        <p:message for="dtDenuncia" 
+                                                   display="icon" />
+
+                                        <p:calendar id="horaDenuncia" 
+                                                    pattern="HH:mm a" 
+                                                    timeOnly="true" 
+                                                    locale="pt"
+                                                    value="#{mBOcorrencia.ocorrencia.horaDenuncia}"
+                                                    requiredMessage="A hora de registro da Denúncia é necessária"/>
+                                        <p:message for="horaDenuncia"
+                                                   display="icon"/>
+
+                                        <p:outputLabel value="Segmento:" /><h:inputHidden />
+
+                                        <p:outputLabel value="Data da Ocorrência:" /><h:inputHidden />
+
+                                        <p:selectOneMenu id="Segmento" 
+                                                         style="width: 185px;"
+                                                         effect="fade"
+                                                         value="#{mBOcorrencia.segSelecionado}" >
+                                            <f:selectItem itemLabel="Selecione o Segmento" 
+                                                          noSelectionOption="true" />
+                                            <f:selectItems value="#{mBOcorrencia.segmentos}"
+                                                           var="seg"
+                                                           itemLabel="#{seg.descSegmento}"
+                                                           itemValue="#{seg.idSegmento}"/>
+                                        </p:selectOneMenu> <h:inputHidden /> 
+                                        <p:calendar id="dtOcorrencia" 
+                                                    showOn="button" 
+                                                    locale="pt"
+                                                    pattern="dd/MM/yyyy"
+
+                                                    title="Selecione a Data"
+                                                    value="#{mBOcorrencia.ocorrencia.dtOcorrencia}"
+                                                    requiredMessage="A data da Ocorrência é necessária"/>
+                                        <p:message for="dtOcorrencia"
+                                                   display="icon" />
+                                        <h:outputText value="Denúncia:" /><h:inputHidden /><h:inputHidden /><h:inputHidden />
+                                        <p:inputTextarea rows="8" 
+                                                         cols="50"
+                                                         value="#{mBOcorrencia.ocorrencia.descOcorrencia}"/><h:inputHidden />
+                                    </h:panelGrid>
+                                </p:tab>
+                                <p:tab title="Encaminhamento"
+                                       rendered="#{mBOcorrencia.exibeTab}">
+                                    <h:panelGrid columns="2" cellpadding="10">
+
+                                        <p:outputLabel for="button" value="Data do Encaminhamento:" />
+                                        <p:calendar id="button" 
+                                                    showOn="button" 
+                                                    locale="pt" 
+                                                    pattern="dd/MM/yyyy" 
+                                                    style="width: 110px;"
+                                                    value="#{mBOcorrencia.encaminhamento.dtEncaminhamento}"/>
+                                        <p:outputLabel value="Orgão Encaminhado:"  />
+                                        <p:selectOneMenu id="advanced" 
+                                                         effect="fade"
+                                                         style="width:218px"
+                                                         value="#{mBOcorrencia.orgSelecionado}">
+                                            <f:selectItem itemLabel="Selecione o Orgão"
+                                                          noSelectionOption="true"/>
+                                            <f:selectItems value="#{mBOcorrencia.orgaos}" 
+                                                           var="orgao" 
+                                                           itemLabel="#{orgao.nomeOrgao}" 
+                                                           itemValue="#{orgao.idOrgaoResp}" />
+                                        </p:selectOneMenu>
+
+                                        <p:outputLabel value="Atendente:" />
+                                        <p:outputLabel value="#{mBLogin.usuarioLogado.nome}" /><h:inputHidden /><h:inputHidden />
+                                        <h:inputHidden /><h:inputHidden />
+
+                                        <p:commandButton value="Gravar Ocorrência"
+                                                         icon="ui-icon-disk" 
+                                                         action="#{mBOcorrencia.salvarOcorrencia}"
+                                                         ajax="false"
+                                                         id="confirmOcorrencia"/>
+                                        <p:commandButton value="Cancelar Ocorrência"
+                                                         icon="ui-icon-cancel"
+                                                         style="float: right"
+                                                         action="#{mBOcorrencia.cancelaVitima}"/>
+
+                                    </h:panelGrid>
+                                </p:tab>                                
+                            </p:tabView>
+                            <p:panel id="basic" header="Pesquisar Vítima"
+                                     style="margin-bottom:20px;
+                                     width: 1000px;
+                                     height: 350px"
+                                     rendered="#{mBOcorrencia.exibeConsulta}" >
+
+                                <h:panelGrid columns="2" 
+                                             cellpadding="8" >
+
+                                    <p:outputLabel value="Nome:" /><h:inputHidden />
+                                    <p:inputText size="35"
+                                                 value="#{mBOcorrencia.vitima.nomeVitima}"
+                                                 required="true"
+                                                 validatorMessage="O nome é necessário!"
+                                                 requiredMessage="O nome é necessário!"
+                                                 styleClass="up" /><h:inputHidden />
+
+                                    <p:outputLabel value="Data Nasc:" /><h:inputHidden />
+                                    
+                                        <p:calendar id="dtNasc"
+                                                    locale="pt" 
+                                                    navigator="true"
+                                                    pattern="dd/MM/yyyy"
+                                                    title="Selecione a Data"
+                                                    value="#{mBOcorrencia.vitima.dtNasc}"
+                                                    required="true"
+                                                    validatorMessage="A data de nascimento é necessária!"
+                                                    requiredMessage="A data de nascimento é necessária!"
+                                                    size="35"/>
+                                     
+                                        <p:commandButton icon="ui-icon-search"
+                                                         title="Pesquisar Vitíma"
+                                                         ajax="false"
+                                                         action="#{mBOcorrencia.carregaVitima()}"
+                                                         style="float: left"/>
+                                       
+                                </h:panelGrid> 
+
+                            </p:panel>
+
+                        </div>
+
+                    </h:form>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

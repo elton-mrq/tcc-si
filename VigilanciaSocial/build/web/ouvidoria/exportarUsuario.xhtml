@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Exportar Usuários</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+
+                    <div id="cadUsuario" 
+                         style="text-align: justify; 
+                         font-size: 1em; 
+                         float: left; 
+                         font-variant: small-caps;
+                         margin-top: 10px; 
+                         font-weight: bold">
+                         Escolha o tipo de Arquivo
+                        <br /><br/>
+                        <h:form id="frmPrincipal"><!--incio form principal -->
+
+                            <p:dataTable id="manutencaoUsuario"
+                                         value="#{mBUsuario.usuarios}"
+                                         var="user"
+                                         style="width: 100%"
+                                         paginator="true"
+                                         rows="5">    
+                             
+                                <f:facet name="header">
+                                    
+                                     <h:outputText value="Exportar Usuários"
+                                                  style="font-size: 1.5em;"/>
+                                    
+                                    <p:outputPanel>                                       
+                                        <h:commandLink style="float: right">    
+                                            <p:graphicImage value="../resources/primefaces-excitebike/images/excel.png"/>  
+                                            <p:dataExporter type="xls" target="manutencaoUsuario" fileName="usuariosExcel" />  
+                                        </h:commandLink> 
+                                        
+                                          <h:commandLink style="float: right">
+                                            <p:graphicImage value="../resources/primefaces-excitebike/images/csv.png" />
+                                            <p:dataExporter type="csv" target="manutencaoUsuario" fileName="usuariosCSV"/>
+                                        </h:commandLink>
+                                        
+                                        <h:commandLink style="float: right">
+                                            <p:graphicImage value="../resources/primefaces-excitebike/images/pdf.png" />
+                                            <p:dataExporter type="pdf" target="manutencaoUsuario" fileName="usuariosPDF"/>
+                                        </h:commandLink>
+
+                                    </p:outputPanel>
+                                </f:facet>
+                                
+                                <f:facet name="Exportar">
+                                     
+                                </f:facet>
+                                
+                                <p:column headerText="Codigo"
+                                          style="width: 20%;
+                                          text-align: center;">
+                                    <h:outputText value="#{user.idUsuario}"/>
+                                </p:column>
+
+                                <p:column headerText="Nome"
+                                          style="width: 30%;">
+                                    <h:outputText value="#{user.nome}"/>
+                                </p:column>
+
+                                <p:column headerText="E-mail"
+                                          style="width: 30%;">
+                                    <h:outputText value="#{user.email}"/>
+                                </p:column>
+
+                                <p:column headerText="Setor"
+                                          style="width: 30%;">
+                                    <h:outputText value="#{user.setor}"/>
+                                </p:column>
+                               
+                            </p:dataTable>                            
+                        
+                            <h:panelGrid columns="2" style="margin: 5px auto; width: 503px; height: 100px; border-radius: 10px; ">
+
+                               
+
+                            </h:panelGrid>  
+                            
+                        </h:form> <!-- fim form Alterar -->
+                    </div>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

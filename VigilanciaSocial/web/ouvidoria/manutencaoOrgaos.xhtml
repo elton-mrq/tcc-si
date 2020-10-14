@@ -1,0 +1,277 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Manutenção de Orgãos Responsáveis</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                   
+                    <div id="cadOrgaos" 
+                         style="text-align: justify; 
+                         font-size: 1em; 
+                         float: left; 
+                         font-variant: small-caps;
+                         margin-top: 10px; 
+                         font-weight: bold">
+                        Clique na Ação Desejada
+                        <br /><br/>
+                        <h:form id="frmPrincipalOrgao"><!--incio form principal -->
+                            <p:growl showDetail="true" sticky="true" life="1000" autoUpdate="true" showSummary="true" />
+                            <p:dataTable id="manutencaoOrgaos"
+                                         value="#{mBOrgResp.orgaos}"
+                                         var="org"
+                                         style="width: 100%"
+                                         paginator="true"
+                                         rows="6"
+                                         rowsPerPageTemplate="3, 6, 9">
+                                
+                                
+                                <f:facet name="header">
+                                    <h:outputText value="Selecione o Orgão Responsável"
+                                                  style="font-size: 1.5em;"/>
+                                </f:facet>
+ 
+                                <p:column headerText="Código"
+                                          width="7%">
+                                    <h:outputText value="#{org.idOrgaoResp}" />
+                                </p:column>
+
+                                <p:column headerText="Código SUAS"
+                                          width="15%">
+                                    <h:outputText value="#{org.codSuas}" />
+                                </p:column>
+
+                                <p:column headerText="Nome"
+                                          width="25%">
+                                    <h:outputText value="#{org.nomeOrgao}" />
+                                </p:column>
+
+                                <p:column headerText="E-mail"
+                                          width="26%">
+                                    <h:outputText value="#{org.email}" />
+                                </p:column>
+
+                                <p:column headerText="Rede"
+                                          width="15%">
+                                    <h:outputText value="#{org.tipoRede}" />
+                                </p:column>
+
+                                <p:column headerText="Manutenção"
+                                          width="15%"
+                                          style="text-align: center;">
+                                    <p:commandButton immediate="true"
+                                                     icon="ui-icon-document-b"
+                                                     update=":formAlterarOrgao:AlterarOrgao"
+                                                     oncomplete="PF('alteraOrgao').show()"
+                                                     actionListener="#{mBOrgResp.CarregaTelEndOrgao(org)}">
+
+                                    </p:commandButton>
+                                    <p:commandButton immediate="true"
+                                                     icon="ui-icon-trash"
+                                                     actionListener="#{mBOrgResp.CarregaTelEndOrgao(org)}"
+                                                     title="Remover Orgão"                                                   
+                                                     update=":frmPrincipalOrgao:manutencaoOrgaos"
+                                                     oncomplete="PF('confirmacao').show()" />
+                                  
+                                    
+                                     <p:dialog id="confirmaExclusao"
+                                              header="Atenção"
+                                              widgetVar="confirmacao"
+                                              showEffect="explode"
+                                              hideEffect="bounce"
+                                              resizable="false"
+                                              closable="false"                                   
+                                              style="font-size: 0.9em;
+                                              text-align: center;">
+
+                                         <h:outputText value="Deseja Excluir #{mBOrgResp.orgResp.nomeOrgao} ?"/>
+                                        <br/><br/>
+
+                                        <p:commandButton value="Sim"
+                                                         actionListener="#{mBOrgResp.removeOrgao()}"
+                                                         oncomplete="PF('confirmacao').hide()"
+                                                         update=":frmPrincipalOrgao:manutencaoOrgaos"/>
+
+                                        <p:commandButton value="Não"                                       
+                                                         oncomplete="PF('confirmacao').hide()" />
+                                    </p:dialog>                               
+                                </p:column>
+
+                            </p:dataTable>
+                        </h:form> <!-- fim form Principal -->
+
+                        <h:form id="formAlterarOrgao"><!--incio form Alterar-->
+                             
+                            <p:dialog id="AlterarOrgao"
+                                      header="Alterar Orgão Responsável"
+                                      resizable="false"
+                                      closable="true"
+                                      showEffect="fade"
+                                      hideEffect="explode"
+                                      width="900"
+                                      height="400"
+                                      widgetVar="alteraOrgao"><!--incio dialog Alterar -->
+                                <h:panelGrid columns="3"
+                                             style="text-align: left;
+                                             font-size: 0.9em;">
+                                    <p:outputLabel value="Código SUAS" />
+                                    <p:outputLabel value="Nome do Equipamento:" />
+                                    <p:outputLabel value="Rede:" />
+                                    <p:inputText size="30"
+                                                 value="#{mBOrgResp.orgResp.codSuas}"/>
+
+                                    <p:inputText id="NomeEq" 
+                                                 size="50"
+                                                 value="#{mBOrgResp.orgResp.nomeOrgao}"/>
+                                    <p:selectOneMenu id="redeOrgao"                                                 
+                                                     label="Text 3"
+                                                     value="#{mBOrgResp.orgResp.tipoRede}">
+                                        <f:selectItem itemLabel="Rede Pública" itemValue="Publica" />
+                                        <f:selectItem itemLabel="Privada" itemValue="Privada" />                                
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="Email:" />
+                                    <p:outputLabel value="Telefone (1):"/>
+                                    <p:outputLabel value="Telefone (2):" />
+                                    <p:inputText id="email"
+                                                 value="#{mBOrgResp.orgResp.email}"/>
+                                    <p:column > 
+                                        <p:inputMask maxlength="2"
+                                                     mask="(99)"
+                                                     size="2"
+                                                     value="#{mBOrgResp.tel1.dddTel}"/>
+                                        <p:inputMask id="tel1" 
+                                                     mask="9999-9999"
+                                                     size="10"
+                                                     value="#{mBOrgResp.tel1.telefone}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputMask maxlength="2"
+                                                     size="2"
+                                                     mask="(99)"
+                                                     value="#{mBOrgResp.tel2.dddTel}"/>
+                                        <p:inputMask id="tel2" 
+                                                     mask="99999-9999"
+                                                     size="10"
+                                                     value="#{mBOrgResp.tel2.telefone}"/> 
+                                    </p:column>
+
+
+                                </h:panelGrid>
+
+                                <div id="endereco" 
+                                     style=" position: absolute; 
+                                     text-align: 
+                                     justify; 
+                                     font-size: 1em; 
+                                     float: left; 
+                                     font-variant: small-caps;
+                                     margin-top: 40px; 
+                                     font-weight: bold;">
+
+                                    Endereço                        
+
+
+                                    <h:panelGrid columns="3"                                          
+                                                 styleClass="semborda" 
+                                                 style="position: absolute; 
+                                                 text-align: left; 
+                                                 font-size: 0.9em;">                           
+                                        <p:outputLabel value="Tipo:" />
+                                        <p:outputLabel value="Logradouro:" />
+                                        <p:outputLabel value="Nº:" />
+
+                                        <p:selectOneMenu id="tipoLog"
+                                                         style="width: 180px"
+                                                         value="#{mBOrgResp.endOrgResp.tipoLog}">
+
+                                            <f:selectItem itemLabel="Alameda" itemValue="Al" />
+                                            <f:selectItem itemLabel="Avenida" itemValue="Av" />
+                                            <f:selectItem itemLabel="Rua" itemValue="Rua" />
+                                            <f:selectItem itemLabel="Travessa" itemValue="Tr" />
+                                        </p:selectOneMenu>
+                                        <p:inputText id="Logradouro" 
+                                                     size="50" 
+                                                     value="#{mBOrgResp.endOrgResp.nomeLog}"/>
+
+                                        <p:inputText id="Num" size="15"
+                                                     value="#{mBOrgResp.endOrgResp.nrLog}"/>  
+
+                                        <p:outputLabel value="Bairro:" />
+                                        <p:outputLabel value="Cidade:"/>
+                                        <p:outputLabel value="UF:" />
+                                        <p:inputText id="bairro" 
+                                                     size="35"
+                                                     value="#{mBOrgResp.endOrgResp.bairro}"/>
+                                        <p:inputText id="cidade"
+                                                     value="#{mBOrgResp.endOrgResp.cidade}"
+                                                     size="30"
+                                                     />
+                                        <p:inputText id="uf" 
+                                                     size="15"
+                                                     value="#{mBOrgResp.endOrgResp.uf}"
+                                                     maxlength="2"/>
+
+                                        <p:outputLabel value="CEP:" />
+                                        <p:outputLabel />
+                                        <p:outputLabel />
+                                        <p:inputMask id="cep" 
+                                                     mask="99999-999"
+                                                     value="#{mBOrgResp.endOrgResp.cep}"/> 
+
+                                        <p:commandButton value="Alterar"                                                                                                          
+                                                         style="float: right;
+                                                         width: 80px"
+                                                         action="#{mBOrgResp.atualizaOrgao()}"
+                                                         update=":frmPrincipalOrgao:manutencaoOrgaos"
+                                                         oncomplete="PF('alteraOrgao').hide()"/>
+                                        <p:commandButton value="Cancelar" 
+                                                         ajax="false" 
+                                                         style="float: right;
+                                                         width: 80px"
+                                                         oncomplete="PF('alteraOrgao').hide()"/>
+
+
+                                    </h:panelGrid>                
+                                </div>  
+                             
+                            </p:dialog><!--fim dialog Alterar -->
+                        </h:form><!--fim form Alterar -->
+
+                    </div>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

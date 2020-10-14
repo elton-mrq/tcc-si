@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Consulta de Orgãos Responsáveis</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                   
+                    <div id="consulta" 
+                         style="text-align: justify; 
+                         font-size: 1em; 
+                         float: left; 
+                         font-variant: small-caps;
+                         margin-top: 10px; 
+                         font-weight: bold">
+                        
+                        <br /><br/>
+                        <h:form id="frmPrincipal"><!--incio form principal -->
+                            <p:growl showDetail="true" sticky="true" life="1000" />
+                            
+                            <p:dataTable id="consultaOrgaos"
+                                         value="#{mBOrgResp.orgaos}"
+                                         var="org"
+                                         style="width: 100%"
+                                         scrollable="true"
+                                         scrollHeight="240"
+                                         widgetVar="orgaosTable"
+                                         emptyMessage="Nenhum Registro Encontrado">
+                                
+                                                                
+                                 <f:facet name="header">
+                                    <h:outputText value="Selecionar o Equipamento"
+                                                  style="font-size: 1.5em;"/>
+                                </f:facet>
+                                
+                                 <p:column headerText="Código"
+                                          width="10%"
+                                          style="text-align: center;"
+                                          sortBy="#{org.idOrgaoResp}">
+                                    <h:outputText value="#{org.idOrgaoResp}" />
+                                </p:column>
+
+                                <p:column headerText="Código SUAS"
+                                          width="15%">
+                                    <h:outputText value="#{org.codSuas}" />
+                                </p:column>
+
+                                <p:column headerText="Nome"
+                                          width="22%"
+                                          filterBy="#{org.nomeOrgao}">
+                                    <h:outputText value="#{org.nomeOrgao}" />
+                                </p:column>
+                                
+                                <p:column filterBy="#{org.tipoRede}" headerText="Rede">
+                                   <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('orgaosTable').filter()" >
+                                            <f:selectItem itemLabel="Selecione a Rede" noSelectionOption="true" />
+                                            <f:selectItem itemLabel="Rede Privada" itemValue="Privada" />
+                                            <f:selectItem itemLabel="Rede Pública" itemValue="Publica" />
+                                        </p:selectOneMenu>
+                                   </f:facet>
+                                    <h:outputText value="#{org.tipoRede}" />
+                                </p:column>
+
+                                <p:column headerText="E-mail"
+                                          width="26%">
+                                    <h:outputText value="#{org.email}" />
+                                </p:column>
+                                
+                                  <p:column width="8%"
+                                          style="text-align: center;">
+                                    <p:commandButton immediate="true"
+                                                     icon="ui-icon-search"
+                                                     oncomplete="PF('orgaoDialog').show()"
+                                                     update=":frmPrincipal:orgaoDetalhe"
+                                                     actionListener="#{mBOrgResp.CarregaTelEndOrgao(org)}" 
+                                                     />
+                                                                                                         
+                                </p:column>
+                            </p:dataTable>
+                            <p:dialog header="Informção Orgão Responsável" 
+                                      widgetVar="orgaoDialog"                                      
+                                      showEffect="fade" 
+                                      hideEffect="fade" 
+                                      resizable="false"
+                                      >
+                                <p:outputPanel id="orgaoDetalhe" 
+                                               style="text-align:justify;">
+                                    <p:panelGrid  columns="2" 
+                                                  rendered="#{not empty mBOrgResp.orgResp}" 
+                                                  columnClasses="label,value"
+                                                  style="width: 490px;
+                                                  height: 220px;">
+
+                                        <h:outputText value="Código:" />
+                                        <h:outputText value="#{mBOrgResp.orgResp.idOrgaoResp}" />
+
+                                        <h:outputText value="Nome" />
+                                        <h:outputText value="#{mBOrgResp.orgResp.nomeOrgao}" />
+
+                                        <h:outputText value="E-mail" />
+                                        <h:outputText value="#{mBOrgResp.orgResp.email}" />
+                                        
+                                        <h:outputText value="Rede" />
+                                        <h:outputText value="#{mBOrgResp.orgResp.tipoRede}" />
+                                        
+                                         <h:outputText value="Endereço" />
+                                         <p:column>
+                                             <h:outputText value="#{mBOrgResp.endOrgResp.tipoLog}" />
+                                             <h:outputText value=" #{mBOrgResp.endOrgResp.nomeLog}," />
+                                             <h:outputText value=" #{mBOrgResp.endOrgResp.nrLog}" />
+                                             <h:outputText value=" - #{mBOrgResp.endOrgResp.bairro}" />
+                                         </p:column>
+                                         
+                                         <p:outputLabel value="Telefones:" />
+                                         <p:column>
+                                             <h:outputText value="#{mBOrgResp.tel1.dddTel}" />
+                                             <h:outputText value="#{mBOrgResp.tel1.telefone} / " />
+                                             <h:outputText value="#{mBOrgResp.tel2.dddTel}" />
+                                             <h:outputText value="#{mBOrgResp.tel2.telefone}" />
+                                         </p:column>
+                                         
+                                    </p:panelGrid>
+                                </p:outputPanel>
+                            </p:dialog>
+
+                        </h:form> <!-- fim form Principal -->
+
+
+
+                    </div>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

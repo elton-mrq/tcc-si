@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Avaliar Ocorrências</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                   
+                    <div id="acompanhamento" 
+                         style="text-align: justify; 
+                         font-size: 1em; 
+                         float: left; 
+                         font-variant: small-caps;
+                         margin-top: 10px; 
+                         font-weight: bold">
+                      
+                        <h:form id="frmPrincipal"><!--incio form principal -->
+                            <p:growl showDetail="true" sticky="true" life="100" />
+                            
+                            <p:dataTable id="ocorrencias"
+                                         value="#{mBAvaliacao.ocorrencias}"
+                                         var="aval"
+                                         style="width: 100%;
+                                         margin-top: 20px;"
+                                         paginator="true"
+                                         rendered="#{mBAvaliacao.exibirTabel}">
+                                
+                                 <f:facet name="header">
+                                    <h:outputText value="Selecione a Ocorrência"
+                                                  style="font-size: 1.5em;"/>
+                                </f:facet>
+ 
+                                <p:column headerText="Código da Ocorrência"
+                                          width="15%"
+                                          style="text-align: center">
+                                    <h:outputText value="#{aval.idOcorrencia}"  />
+                                </p:column>
+
+                                <p:column headerText="Data da Denúncia"
+                                          width="15%">
+                                    <h:outputText value="#{aval.dtDenuncia}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/> 
+                                    </h:outputText>
+                                    
+                                </p:column>
+
+                                <p:column headerText="Nome da Vitíma"
+                                          width="40%">
+                                    <h:outputText value="#{aval.idVitma.nomeVitima}" />
+                                </p:column>
+
+                                <p:column headerText="Data de Nascimento"
+                                          width="15%"
+                                          style="text-align: center">
+                                    <h:outputText  value="#{aval.idVitma.dtNasc}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/> 
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Agressor"
+                                          width="15%">
+                                    <h:outputText value="#{aval.idAgressor.descParentesco}" />
+                                </p:column>
+                                
+                                 <p:column headerText="Segmento"
+                                          width="15%">
+                                     <h:outputText value="#{aval.segmentoidSegmento.descSegmento}" />
+                                </p:column>
+                                
+                                <p:column width="20%" 
+                                          style="text-align: center">
+                                    <p:commandLink value="Avaliar" 
+                                                   immediate="true"
+                                                   update=":frmAvaliar:dialogAvaliar"
+                                                   actionListener="#{mBAvaliacao.carregaOcorrencia(aval)}" 
+                                                   ajax="false"/>
+                                </p:column>
+
+                               
+                            </p:dataTable>
+                        </h:form> <!-- fim form Principal -->
+                        
+                            
+                            <p:panel id="dialogAvaliar"
+                                      header="Inserir Avaliação"
+                                      rendered="#{mBAvaliacao.exibirPanel}"
+                                      widgetVar="avaliacaoDialog"
+                                      style="width: 1000px;">
+                                <h:form id="frmAvaliar"><!--inicio form avaliar -->
+                                <h:panelGrid columns="3"
+                                             cellspacing="10">
+                                    
+                                    <p:outputLabel value="Código da Ocorrência" /><h:inputHidden />
+                                    <p:outputLabel value="#{mBAvaliacao.ocorrencia.idOcorrencia}" />
+                                    
+                                    <p:outputLabel value="Data da Avaliação" /><h:inputHidden />
+                                       <p:calendar id="dtAvaliacao" 
+                                                    showOn="button" 
+                                                    locale="pt" 
+                                                    pattern="dd/MM/yyyy"
+                                                    title="Selecione a Data"
+                                                    requiredMessage="A data da Denúncia é necessária!"
+                                                    value="#{mBAvaliacao.avaliacao.dtAvaliacao}"
+                                                    required="true"/>
+                                       
+                                       <p:outputLabel value="Avaliação" /><h:inputHidden />
+                                       <p:selectOneMenu id="slcAvaliacao"
+                                                        style="width: 220px"
+                                                        value="#{mBAvaliacao.avaliacao.avaliacao}"
+                                                        required="true">
+                                           <f:selectItem itemLabel="Selecione o Resultado" noSelectionOption="true" />
+                                           <f:selectItem itemLabel="Ótimo" itemValue="OTIMO" />
+                                           <f:selectItem itemLabel="Bom" itemValue="BOM" />
+                                           <f:selectItem itemLabel="Ruim" itemValue="RUIM" />
+                                           <f:selectItem itemLabel="Péssimo" itemValue="PESSIMO" />
+                                       </p:selectOneMenu> 
+                                       
+                                       <p:outputLabel value="Histórico" /><h:inputHidden />
+                                       <p:inputTextarea rows="8"
+                                                        cols="50"
+                                                        value="#{mBAvaliacao.avaliacao.descAvaliacao}"
+                                                        required="true"/>
+                                       
+                                       <p:column ></p:column>
+                                       <p:column ></p:column>
+                                       <p:column>
+                                           <p:commandButton value="Confirmar"
+                                                            style="float: right"
+                                                            oncomplete="PF('confirmacao').show()"/>
+                                        
+                                       </p:column>
+                                       
+                                      <p:dialog id="confirmaAvaliacao"
+                                              header="Atenção"
+                                              widgetVar="confirmacao"
+                                              showEffect="explode"
+                                              hideEffect="bounce"
+                                              resizable="false"
+                                              closable="false"                                   
+                                              style="font-size: 0.9em;
+                                              text-align: center;">
+
+                                          <h:outputText value="Deseja Avaliar a Ocorrência #{mBAvaliacao.ocorrencia.idOcorrencia}?"/>
+                                        <br/><br/>
+
+                                        <p:commandButton value="Sim"
+                                                         immediate="true"
+                                                         ajax="false"
+                                                         action="#{mBAvaliacao.salvarAvaliacao()}"
+                                                         oncomplete="PF('confirmacao').hide()" />
+
+                                        <p:commandButton value="Não"                                       
+                                                         oncomplete="PF('confirmacao').hide()" />
+                                    </p:dialog>
+                                    
+                                </h:panelGrid>
+                                      </h:form>
+                                <h:form>
+                                 <div  style="margin-left: 400px;
+                                                         margin-top: -51px">
+                             <p:commandButton value="Cancelar"
+                                                         ajax="false" 
+                                                         action="#{mBAvaliacao.cancelarAvaliacao()}"/>
+                                 </div>                   
+                             </h:form>
+                            </p:panel>
+                            
+                  
+                      
+                            
+                              
+                    
+                    </div>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

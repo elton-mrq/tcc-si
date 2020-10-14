@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+            
+            <script>  
+                    jQuery(document).ready(function(jQuery) {  
+                        // Chamada da funcao upperText(); ao carregar a pagina  
+                        upperText();  
+                    });  
+                    // Funcao que faz o texto ficar em uppercase  
+                    function upperText() {  
+                        // Para tratar o colar  
+                        jQuery(".up").bind('paste', function(e) {  
+                            var el = jQuery(this);  
+                            setTimeout(function() {  
+                                var text = jQuery(el).val();  
+                                el.val(text.toUpperCase());  
+                            }, 100);  
+                        });  
+
+                        // Para tratar quando é digitado  
+                        jQuery(".up").keypress(function() {  
+                            var el = jQuery(this);  
+                            setTimeout(function() {  
+                                var text = jQuery(el).val();  
+                                el.val(text.toUpperCase());  
+                            }, 100);  
+                        });                        
+                                               
+                    }  
+            </script>  
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Cadastrar Usuários</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+
+                    <div id="cadUsuario" 
+                         style="text-align: justify; 
+                         font-size: 1.1em; 
+                         float: left; 
+                         font-variant: small-caps; 
+                         margin-top: 10px; 
+                         font-weight: bold">
+
+
+                        <p:growl showDetail="true"
+                                 showSummary="true"
+                                 autoUpdate="true" />
+                        <p:panel header="Insira os Dados do Usuário"
+                                 style="width: 995px;
+                                 height: 380px;">
+                            <h:form id="formPrincipal">       
+                                <h:panelGrid id="user" 
+                                             columns="2" 
+                                             styleClass="semborda" 
+                                             style="position: absolute; 
+                                             margin-top: 5px; 
+                                             text-align: left; 
+                                             font-size: 0.9em;"
+                                             cellpadding="5">  
+
+                                    <p:outputLabel value="Nome: " 
+                                                   style="text-align: left" /><p:outputLabel />
+                                    <p:inputText id="Nome" 
+                                                 size="40" 
+                                                 required="true" 
+                                                 value="#{mBUsuario.usuario.nome}" 
+                                                 requiredMessage="Nome Obrigatório"
+                                                 styleClass="up"/>                                
+                                    <p:message for="Nome" display="icon"/>
+
+                                    <p:outputLabel value="E-mail:"  /><p:outputLabel />
+                                    <p:inputText id="email" 
+                                                 size="40" 
+                                                 required="true"
+                                                 validatorMessage="e-mail inválido"
+                                                 requiredMessage="E-mail é obrigatório"
+                                                 value="#{mBUsuario.usuario.email}">
+                                        <f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+" />
+                                    </p:inputText>
+                                    <p:message for="email" display="icon" />
+
+                                    <p:outputLabel value="Senha:" /> <p:outputLabel />
+                                    <p:password id="senhaPadrao" 
+                                                size="40" 
+                                                value="#{mBUsuario.usuario.senha}"
+                                                required="true"
+                                                requiredMessage="Senha é Obrigatória!"/>
+                                    <p:message for="senhaPadrao" display="icon"/>
+
+                                    <p:outputLabel value="Setor" /><p:outputLabel />                           
+                                    <p:selectOneMenu id="console" 
+                                                     value="#{mBUsuario.usuario.setor}" 
+                                                     required="true"
+                                                     requiredMessage="Setor Obrigatório"
+                                                     style="width: 300px">
+                                        <f:selectItem itemLabel="Selecione o Setor" itemValue="" noSelectionOption="true" />
+                                        <f:selectItem itemLabel="Casa dos Conselhos" itemValue="Casa dos Conselhos" />
+                                        <f:selectItem itemLabel="Central de Informações" itemValue="Central de Informações" />
+                                        <f:selectItem itemLabel="Ouvidoria Social" itemValue="Ouvidoria Social" />
+                                        <f:selectItem itemLabel="Vigilância Social" itemValue="Vigilância Social" />
+                                    </p:selectOneMenu><p:outputLabel /> 
+
+                                    <p:row>
+                                        <p:column colspan="3">
+
+                                            <p:commandButton value="Confirmar" 
+                                                             ajax="false"                                                          
+                                                             action="#{mBUsuario.gravaUsuario}" 
+                                                             process="@formPrincipal"/>                               
+
+
+                                        </p:column>                                
+                                    </p:row>
+                                </h:panelGrid>  
+
+                            </h:form>    
+                            <h:form>
+                                <p:commandButton value="Cancelar" 
+                                                 ajax="false"                                                          
+                                                 action="#{mBUsuario.cancelarInclusao}" 
+                                                 process="@formPrincipal"
+                                                 style="margin-top: 277px;
+                                                 margin-left: 220px"/>     
+                            </h:form>
+                        </p:panel>
+
+
+
+
+                    </div> 
+
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+           
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Vigilância e Defesa Social</title>
+            </f:facet>
+         
+        </h:head>
+
+        <h:body>          
+                
+               
+                    <h:form> 
+                        
+                        <p:menu style="width: 230px">
+                            
+                            <p:submenu label="Pagina Incial">
+                                <p:menuitem value="Home" icon="ui-icon-home" outcome="index.xhtml"/>
+                            </p:submenu>
+                            
+                            <p:submenu label="Acesso Restrito">
+                                <p:menuitem value="Login" 
+                                            icon="ui-icon-locked"
+                                            outcome="login.xhtml"/>
+                            </p:submenu>
+                            
+                            <p:submenu label="Informações">
+                                <p:menuitem value="Casa dos Conselhos" icon="ui-icon-check"/>
+                                <p:menuitem value="Central de Informações" icon="ui-icon-check"/>                               
+                                <p:menuitem value="Ouvidoria" icon="ui-icon-check" />
+                                <p:menuitem value="Vigilância Social" icon="ui-icon-check" />
+                            </p:submenu>
+                            
+                        </p:menu>   
+                        
+                        
+                        
+                    </h:form>             
+                               
+           
+
+        </h:body>
+
+    </f:view>
+</html>
+

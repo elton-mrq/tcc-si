@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Ouvidoria</ui:insert></title>
+            </f:facet>            
+           
+            <style type="text/css">
+
+                body{
+
+                    background-color:  #eaf5f7;
+
+                }
+
+                #titulo{
+
+                    margin-top: 15px;
+                    float: left;
+                    font-size: 25pt;
+                    font-variant: small-caps;
+                    font-weight: bold;
+
+                }
+
+                #logotipo{
+
+                    text-align: right;
+                    float: right;
+                    margin-top: 10px;
+
+                }
+                
+                #rodape{
+                     font-variant: small-caps;
+                    font-weight: bold;
+                    margin-top: 30px;
+                }
+
+            </style>
+
+        </h:head>
+
+        <h:body>
+            
+            <div align="center">
+                <p:layout 
+                    style="min-width: 1020px; 
+                    max-width: 1020px;
+                    min-height: 660px;
+                    max-height: 900px;"
+                    
+                   >
+
+                    <p:layoutUnit 
+                        id="header" 
+                        position="north" 
+                        size="100" 
+                        style="border: none;"><!--Inicio Cabeçalho -->
+
+                        <ui:insert name="titulo">
+                            <div id="titulo">
+                                Vigilância Socioassistencial
+                            </div>
+                        </ui:insert>
+
+                        <ui:insert name="logotipo">
+                            <div id="logotipo">
+                                <p:graphicImage 
+                                    url="resources/primefaces-excitebike/images/logotipo2.png" 
+                                    style="width: 300px; 
+                                    height: 70px"/>
+                            </div>
+                        </ui:insert> 
+
+                    </p:layoutUnit> <!--Fim do Cabeçalho -->
+
+
+                    <p:layoutUnit 
+                        id="conteudo" 
+                        position="center" 
+                        style="border: none;"
+                        rendered="true"
+                        resizable="true"><!-- Corpo da Pagina -->
+
+                        <h:form>
+
+                            <p:menubar>
+                                <p:submenu label="Usuarios">                                
+                                    <p:menuitem value="Cadastrar" 
+                                                icon="ui-icon-disk"
+                                                outcome="formCadUsuario.xhtml"/>
+                                    <p:menuitem value="Manutenção" 
+                                                icon="ui-icon-wrench"
+                                                outcome="manutencaoUsuario.xhtml"/> 
+                                    <p:menuitem value="Consulta"
+                                                icon="ui-icon-search"
+                                                outcome="consultaUsuario.xhtml"/>
+                                    <p:menuitem value="Exportar"
+                                                icon="ui-icon-document"
+                                                outcome="exportarUsuario.xhtml"/>
+                                </p:submenu>
+
+                                <p:submenu label="Equipamentos">                                
+                                    <p:menuitem value="Cadastrar" 
+                                                outcome="formCadOrgao.xhtml"
+                                                icon="ui-icon-disk"/>
+                                    <p:menuitem value="Manutenção"
+                                                icon="ui-icon-wrench"
+                                                outcome="manutencaoOrgaos.xhtml"/> 
+                                   
+                                        <p:menuitem value="Consulta"
+                                                    outcome="consultaOrgaos.xhtml"
+                                                    icon="ui-icon-search"/>
+                                       
+                                </p:submenu>
+
+                                <p:submenu label="Ocorrências"
+                                           >                                
+                                    <p:menuitem value="Registar"
+                                                outcome="ocorrencias.xhtml"/>
+                                    <p:menuitem value="Acompanhar"
+                                                 outcome="acompanhamento.xhtml"/>
+                                    <p:menuitem value="Avaliar"
+                                                outcome="avaliacao.xhtml"/>
+                                    <p:separator />
+                                    <p:submenu label="Listar Ocorrências">
+                                        <p:menuitem value="Não Acompanhadas"
+                                                    outcome="ocorrenciasNaoAcompanhadas.xhtml"/>
+                                        <p:menuitem value="Acompanhadas"
+                                                    outcome="ocorrenciasAcompanhadas.xhtml"/>
+                                        <p:menuitem value="Avaliadas" 
+                                                    outcome="ocorrenciasEncerradas.xhtml"/>
+                                    </p:submenu>
+                                </p:submenu>
+                                
+                                <p:submenu label="Relatórios">                                
+                                    <p:menuitem value="Segmento"
+                                                outcome="relatorioSegmento.xhtml"
+                                                update="panel"/> 
+                                </p:submenu>
+                                
+                                <p:submenu label="Sobre">                                
+                                    <p:menuitem value="Ouvidoria" outcome="sobre.xhtml"/> 
+                                </p:submenu>
+
+                                <f:facet name="options">
+                                    <p:commandButton value="Sair" 
+                                                     icon="ui-icon-extlink" 
+                                                     ajax="false"
+                                                     action="#{mBLogin.doLogout}"/>
+                                </f:facet>
+                            </p:menubar>
+                        </h:form>
+
+
+                        <ui:insert name="conteudo">
+                           
+                        </ui:insert>
+
+
+
+                    </p:layoutUnit><!-- Fim corpo da Pagina -->
+
+                    <p:layoutUnit position="south" 
+                                  id="footer" 
+                                  size="100" 
+                                  style="border: none;"><!-- rodapé -->
+                        <ui:insert name="rodape">
+                            <div id="usuarioLogado"
+                                 style="float: right;
+                                 margin-top: 5px;
+                                 font-weight: bold;
+                                 font: small">
+                                <h:outputText value="Usuario Logado: #{mBLogin.usuarioLogado.nome}" />
+                            </div>
+                            <div id="rodape">
+                                Sistema Vigilância e Defesa Social - Ouvidoria. <br/>
+                                <h:outputLink value="http://www.barretos.sp.gov.br/">Prefeitura Municipal de Barretos</h:outputLink>
+                            </div>
+                            
+                        </ui:insert>
+                    </p:layoutUnit><!-- Fim do rodapé -->
+
+                </p:layout>
+            </div>
+        </h:body>
+    </f:view>
+</html>

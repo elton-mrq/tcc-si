@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Ouvidoria </div></ui:define>
+
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>
+
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                    <h:form>
+                        <p:growl showDetail="true" sticky="true" />
+                        <p:panel id="basic" 
+                                 header="Ouvidoria Social"  
+                                 style="margin-top:10px; 
+                             width: 99%; 
+                             height: 380px; font-size: 16px;">
+                            <h:panelGrid columns="2" 
+                                         cellpadding="10">
+                                <p:graphicImage url="../resources/primefaces-excitebike/images/ouvidoria.png" />
+
+                                <div id="boasVindas" 
+                                     style="text-align: justify; 
+                                 font-size: 14px; 
+                                 font-weight: bold; 
+                                 font: small-caps; 
+                                 margin-top: 20px; 
+                                 margin-left: 25px; 
+                                 margin-right: 20px; ">
+                                    Bem vindo ao Módulo ouvidoria!<br/>
+                                    Aqui você poderá ter acesso as funcionalidades gerais tais como:
+
+                                    <ul type="disc">
+                                        <li> Cadastrar os Orgãos Municipais;    </li> 
+                                        <li> Cadastrar os Segmentos de denuncias; </li>
+                                        <li> Registrar as ocorrencias </li>
+                                    </ul>                               
+
+                                </div>
+
+                            </h:panelGrid>
+
+
+                        </p:panel>
+
+                    </h:form>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

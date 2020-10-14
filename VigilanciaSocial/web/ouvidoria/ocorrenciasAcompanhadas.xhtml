@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+            <style type="text/css">                
+                .semborda tr, .semborda td{                    
+                    border: none !important;                    
+                }                
+            </style> 
+            <script type="text/javascript">
+
+                PrimeFaces.locales['pt'] = {
+                    closeText: 'Fechar',
+                    prevText: 'Anterior',
+                    nexText: 'Próximo',
+                    currentText: 'Começo',
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
+                        'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                   // dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex' 'Sáb'],
+                            dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+                    wekHeader: 'Semana',
+                    firstDay: 0,
+                    isRTL: false,
+                    showMonthAfterYear: false,
+                    yearSuffix: '',
+                    timeOnlyTitle: 'Tempo',
+                    hourText: 'Hora',
+                    minuteText: 'Minuto',
+                    secondText: 'Segundo',
+                    ampm: 'false',
+                    month: 'Mês',
+                    week: 'Semana',
+                    day: 'Dia',
+                    allDayTex: 'Todo o Dia'
+                };
+
+            </script>
+
+
+        </h:head>
+
+        <h:body>      
+
+            <ui:composition template="../template/templateServicos.xhtml">
+
+                <ui:define name="titulo"><div id="titulo">Ocorrências Acompanhadas</div></ui:define>
+                <ui:define name="logotipo">
+
+                    <div id="logotipo">                                
+                        <p:graphicImage url="../resources/primefaces-excitebike/images/logotipo2.png" 
+                                        style="width: 300px; height: 70px"/>                                
+                    </div>
+                </ui:define>
+
+                <ui:define name="conteudo">
+                    <h:form id="listarOcorrencia">    
+                        <div id="dadosOcorrencia" style="text-align: justify; font-size: 1em; float: 
+                             left; font-variant: small-caps; margin-top: 30px; font-weight: bold">
+                            <p:growl showDetail="true" sticky="true" />
+                                                      
+                             <p:dataTable id="ocorrenciasAcompanhadas"
+                                          value="#{mBAcompanhamento.acompanhamentos}"
+                                         var="acomp"
+                                         style="width: 100%"
+                                         paginator="true"
+                                         rendered="true">
+                                 
+                                  <f:facet name="header">
+                                       <h:outputText value="Ocorrências Acompanhadas"
+                                                  style="font-size: 1.5em;"/>
+                                    <p:outputPanel>                                       
+                                        <h:commandLink style="float: right">    
+                                            <p:graphicImage value="../resources/primefaces-excitebike/images/excel.png"/>  
+                                            <p:dataExporter type="xls" target="ocorrenciasAcompanhadas" fileName="ocorrenciasAcompanhadas" />  
+                                        </h:commandLink> 
+                                    </p:outputPanel>
+                                </f:facet>
+                                 
+                                   <f:facet name="header">
+                                   
+                                </f:facet>
+ 
+                                <p:column headerText="Código da Ocorrência"
+                                          width="20%"
+                                          style="text-align: center"
+                                          filterBy="#{acomp.idOcorrencia.idOcorrencia}">
+                                    <h:outputText value="#{acomp.idOcorrencia.idOcorrencia}"  />
+                                </p:column>
+
+                                <p:column headerText="Data da Denúncia"
+                                          width="15%"
+                                          style="text-align: center">
+                                    <h:outputText value="#{acomp.idOcorrencia.dtDenuncia}" >
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/> 
+                                    </h:outputText>
+                                    
+                                </p:column>
+                                 
+                                  <p:column headerText="Nome da Vitíma"
+                                          width="40%"
+                                          filterBy="#{acomp.idOcorrencia.idVitma.nomeVitima}">
+                                    <h:outputText value="#{acomp.idOcorrencia.idVitma.nomeVitima}" />
+                                </p:column>
+                                 
+                                  <p:column headerText="Data Nascimento"
+                                          width="15%"
+                                           style="text-align: center">
+                                      <h:outputText value="#{acomp.idOcorrencia.idVitma.dtNasc}" >
+                                          <f:convertDateTime pattern="dd/MM/yyyy" />
+                                      </h:outputText>
+                                </p:column>
+                                 
+                                 
+                                  <p:column headerText="Data do Acompanhamento"
+                                          width="15%"
+                                          style="text-align: center">
+                                      <h:outputText value="#{acomp.dtAcomp}" >
+                                          <f:convertDateTime pattern="dd/MM/yyyy" />
+                                      </h:outputText>
+                                </p:column>
+                                 
+                                  <p:column headerText="Histórico"
+                                           width="30%"
+                                           exportable="true"
+                                           style="font-size: 0.85em">
+                                      <h:outputText value="#{acomp.evolucao}" />
+                                </p:column>
+                                 
+                            </p:dataTable>
+                            
+                        </div>
+                    </h:form>
+                </ui:define>            
+
+            </ui:composition>  
+
+        </h:body>
+
+    </f:view>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title><ui:insert name="titulo">Vigilancia e Defesa Social</ui:insert></title>
+            </f:facet>
+
+            <style type="text/css">
+                body{
+                    background-color: #eaf5f7;
+                }
+
+                #titulo{
+                    margin-top: 15px;
+                    float: left;
+                    font-size: 25pt;
+                    font-variant: small-caps;
+                    font-weight: bold;
+                }
+
+                #logotipo{
+                    text-align: right;
+                    float: right;
+                    margin-top: 10px;
+                }                
+              
+
+            </style>
+
+        </h:head>
+
+        <h:body>
+
+            <div align="center">
+
+                <p:layout style="min-width: 1020px; 
+                          max-width: 1020px; 
+                          min-height: 680px">
+
+                    <p:layoutUnit id="header" 
+                                  position="north" 
+                                  size="90" 
+                                  style="border: none;"><!--Inicio Cabeçalho -->
+                        
+                        <ui:insert name="titulo">
+                            <div id="titulo">
+                                Vigilância Socioassistencial
+                            </div>
+                        </ui:insert>
+
+                        <div id="logotipo">
+                            <p:graphicImage url="resources/primefaces-excitebike/images/logotipo2.png" 
+                                            style="width: 300px; height: 60px"/>
+                        </div>
+
+
+                    </p:layoutUnit> <!--Fim do Cabeçalho -->
+
+                    <p:layoutUnit id="menu" position="west" size="250" style="border: none;"><!-- Menu -->
+
+                        <h:form> 
+                        
+                            <p:menu style="width: 230px;">
+                            
+                            <p:submenu label="Pagina Incial">
+                                <p:menuitem value="Home" icon="ui-icon-home" outcome="index.xhtml"/>
+                            </p:submenu>
+                            
+                            <p:submenu label="Acesso Restrito">
+                                <p:menuitem value="Login" 
+                                            icon="ui-icon-locked"
+                                            outcome="login.xhtml"/>
+                            </p:submenu>
+                            
+                            <p:submenu label="Informações">
+                                <p:menuitem value="Casa dos Conselhos" icon="ui-icon-check"/>
+                                <p:menuitem value="Central de Informações" icon="ui-icon-check" outcome="infoCentralInfo.xhtml"/>                               
+                                <p:menuitem value="Ouvidoria" icon="ui-icon-check" />
+                                <p:menuitem value="Vigilância Social" icon="ui-icon-check" />
+                            </p:submenu>
+                            
+                            </p:menu>>   
+                        
+                        
+                        
+                    </h:form>      
+                        
+                       
+                    </p:layoutUnit>
+
+                    <p:layoutUnit id="conteudo" 
+                                  position="center" 
+                                  style="border: none;"><!-- Corpo da Pagina -->
+
+                        <ui:insert name="conteudo">
+
+                        </ui:insert>
+
+
+
+                    </p:layoutUnit><!-- Fim corpo da Pagina -->
+
+                    <p:layoutUnit position="south" 
+                                  id="footer" size="90" 
+                                  style="border: none;"><!-- Cabeçalho -->
+
+                        <ui:insert name="rodape">
+
+                            <div id="rodape"
+                                 style="font-variant: small-caps;
+                                 font-weight: bold;
+                                 margin-top: 20px;">
+
+                                Sistema Vigilância e Defesa Social - Ouvidoria.
+
+                            </div>
+
+                        </ui:insert>
+                    </p:layoutUnit><!-- Fim do cabeçalho -->
+
+                </p:layout>
+
+            </div>
+
+        </h:body>
+
+    </f:view>
+
+</html>
